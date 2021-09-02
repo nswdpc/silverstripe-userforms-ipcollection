@@ -1,0 +1,26 @@
+{
+    "name": "nswdpc/silverstripe-userforms-ipcollection",
+    "description": "Collect IP addresses of submissions, taking into account proxies",
+    "type": "silverstripe-vendormodule",
+    "keywords": [
+        "silverstripe",
+        "userforms",
+        "IP",
+        "address",
+        "proxy"
+    ],
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "James Ellis",
+            "homepage": "https://dpc.nsw.gov.au"
+        }
+    ],
+    "require": {
+        "silverstripe/userforms": "^5.7"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.7",
+        "friendsofphp/php-cs-fixer": "^2.18"
+    }
+}

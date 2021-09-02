@@ -1,0 +1,14 @@
+---
+Name: nswdpc-userforms-ipcollection
+---
+SilverStripe\UserForms\Model\Recipient\EmailRecipient:
+  extensions:
+    - 'NSWDPC\UserForms\IpCollection\EmailRecipientExtension'
+SilverStripe\UserForms\Control\UserDefinedFormController:
+  extensions:
+    - 'NSWDPC\UserForms\IpCollection\AddIPForRecipientExtension'
+# default IP priorities
+NSWDPC\UserForms\IpCollection\IP:
+  ip_priority:
+    - 'CF_CONNECTING_IP'
+    - 'X_FORWARDED_FOR'
