@@ -16,6 +16,16 @@
             "homepage": "https://dpc.nsw.gov.au"
         }
     ],
+    "autoload": {
+         "psr-4": {
+             "NSWDPC\\UserForms\\IpCollection\\": [
+                 "src/"
+             ],
+             "NSWDPC\\UserForms\\IpCollection\\Tests\\": [
+                 "tests/"
+             ]
+         }
+    },
     "require": {
         "silverstripe/userforms": "^5.7"
     },
