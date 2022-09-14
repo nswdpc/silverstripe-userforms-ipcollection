@@ -14,7 +14,7 @@ class IpTest extends SapphireTest {
 
     protected $ra, $cf, $xff = null;
 
-    public function setUp() {
+    protected function setUp() : void {
         parent::setUp();
 
         // store original values
@@ -29,7 +29,7 @@ class IpTest extends SapphireTest {
         }
     }
 
-    public function tearDown() {
+    protected function tearDown() : void {
         parent::tearDown();
 
         // reset values
