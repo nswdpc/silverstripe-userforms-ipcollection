@@ -19,7 +19,8 @@
     "autoload": {
          "psr-4": {
              "NSWDPC\\UserForms\\IpCollection\\": [
-                 "src/"
+                 "src/Extensions/",
+                 "src/Models/"
              ],
              "NSWDPC\\UserForms\\IpCollection\\Tests\\": [
                  "tests/"
