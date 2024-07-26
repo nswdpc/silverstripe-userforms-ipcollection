@@ -28,7 +28,7 @@
          }
     },
     "require": {
-        "silverstripe/userforms": "^5.12.0"
+        "silverstripe/userforms": "^6"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5",
