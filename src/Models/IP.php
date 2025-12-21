@@ -12,10 +12,7 @@ class IP {
 
     use Configurable;
 
-    /**
-     * @var array
-     */
-    private static $ip_priority = [];
+    private static array $ip_priority = [];
 
     /**
      * Get the IP address based on configured priorties.
@@ -34,8 +31,9 @@ class IP {
         foreach($headers as $header) {
             $value = "";
             if(isset($_SERVER[ $prefix . $header ])) {
-                $value = trim(strip_tags($_SERVER[ $prefix . $header ]));
+                $value = trim(strip_tags((string) $_SERVER[ $prefix . $header ]));
             }
+
             if($value !== '') {
                 // found value
                 return $value;
@@ -45,7 +43,7 @@ class IP {
         // fall back to REMOTE_ADDR
         // @phpstan-ignore identical.alwaysTrue
         if($value === '') {
-            return isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '';
+            return $_SERVER['REMOTE_ADDR'] ?? '';
         } else {
             // nothing found
             return '';

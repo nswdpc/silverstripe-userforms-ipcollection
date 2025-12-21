@@ -12,8 +12,11 @@ class IpTest extends SapphireTest {
      */
     protected $usesDatabase = false;
 
-    protected $ra, $cf, $xff = null;
+    protected $ra;
+    protected $cf;
+    protected $xff;
 
+    #[\Override]
     protected function setUp() : void {
         parent::setUp();
 
@@ -21,14 +24,17 @@ class IpTest extends SapphireTest {
         if(isset($_SERVER['REMOTE_ADDR'])) {
             $this->ra = $_SERVER['REMOTE_ADDR'];
         }
+
         if(isset($_SERVER['HTTP_CF_CONNECTING_IP'])) {
             $this->cf = $_SERVER['HTTP_CF_CONNECTING_IP'];
         }
+
         if(isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
             $this->xff = $_SERVER['HTTP_X_FORWARDED_FOR'];
         }
     }
 
+    #[\Override]
     protected function tearDown() : void {
         parent::tearDown();
 
@@ -36,9 +42,11 @@ class IpTest extends SapphireTest {
         if($this->ra) {
             $_SERVER['REMOTE_ADDR'] = $this->ra;
         }
+
         if($this->cf) {
             $_SERVER['HTTP_CF_CONNECTING_IP'] = $this->cf;
         }
+
         if($this->xff) {
             $_SERVER['HTTP_X_FORWARDED_FOR'] = $this->xff;
         }
@@ -47,7 +55,7 @@ class IpTest extends SapphireTest {
     /**
      * Test IP priority logic
      */
-    public function testIpPriority() {
+    public function testIpPriority(): void {
 
         $cf = 'a.b.c.d';
         $xff = '1.2.3.4';
@@ -66,7 +74,7 @@ class IpTest extends SapphireTest {
     /**
      * Test IP fallback logic
      */
-    public function testIpFallback() {
+    public function testIpFallback(): void {
 
         $cf = '';
         $xff = '';
@@ -85,7 +93,7 @@ class IpTest extends SapphireTest {
     /**
      * Test untrusted data
      */
-    public function testIpClean() {
+    public function testIpClean(): void {
 
         $cf = '127.0.0.1,<a href="naughty">click here!</a>';
         $xff = '';
