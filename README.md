@@ -8,18 +8,13 @@ This modules allows messages generated from user form submissions to include an 
 composer require nswdpc/silverstripe-userforms-ipcollection
 ```
 
-
 ## License
 
 [BSD-3-Clause](./LICENSE.md)
 
 ## Documentation
 
-After installation:
-
-1. For every recipient who should receive an originating IP (or IPs), check the 'Include the originating IP address' checkbox
-2. When a submission is made, the originating IP will be determined. REMOTE_ADDR will be used as a fallback.
-3. All user form email templates in your project should handle include the {$OriginatingIP} template variable, these can usually be found in the templates/email/ directory of a project theme(s).
+All user form email templates in your project should handle include the {$OriginatingIP} template variable, these can usually be found in the templates/email/ directory of a project or its theme(s).
 
 ```html
 <% if $OriginatingIP %>
@@ -27,7 +22,11 @@ After installation:
 <% end_if %>
 ```
 
-With the same for plain-text templates.
+### After installation
+
+1. For every recipient who should receive an originating IP (or IPs), check the 'Include the originating IP address' checkbox on the "Email Content" tab.
+
+When a submission is made, the originating IP will be determined
 
 The Originating IP may not be a single IP address, for instance it could include any number of proxy IPs.
 
@@ -59,7 +58,7 @@ NSWDPC\UserForms\IpCollection\IP:
 
 ## Maintainers
 
-+ [dpcdigital@NSWDPC:~$](https://dpc.nsw.gov.au)
++ PD Web Team
 
 
 ## Bugtracker
