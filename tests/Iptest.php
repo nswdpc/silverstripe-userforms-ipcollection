@@ -13,7 +13,9 @@ class IpTest extends SapphireTest
     protected $usesDatabase = false;
 
     protected $ra;
+
     protected $cf;
+
     protected $xff;
 
     #[\Override]
