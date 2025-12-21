@@ -3,7 +3,7 @@
 namespace NSWDPC\UserForms\IpCollection;
 
 use SilverStripe\Forms\CheckboxField;
-use SilverStripe\Forms\Fieldlist;
+use SilverStripe\Forms\FieldList;
 use SilverStripe\ORM\DataExtension;
 
 /**

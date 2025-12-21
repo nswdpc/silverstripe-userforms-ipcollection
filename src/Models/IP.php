@@ -2,7 +2,7 @@
 
 namespace NSWDPC\UserForms\IpCollection;
 
-use Silverstripe\Core\Config\Configurable;
+use SilverStripe\Core\Config\Configurable;
 
 /**
  * IP model
@@ -36,14 +36,15 @@ class IP {
             if(isset($_SERVER[ $prefix . $header ])) {
                 $value = trim(strip_tags($_SERVER[ $prefix . $header ]));
             }
-            if($value) {
+            if($value !== '') {
                 // found value
                 return $value;
             }
         }
 
         // fall back to REMOTE_ADDR
-        if(!$value) {
+        // @phpstan-ignore identical.alwaysTrue
+        if($value === '') {
             return isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '';
         } else {
             // nothing found

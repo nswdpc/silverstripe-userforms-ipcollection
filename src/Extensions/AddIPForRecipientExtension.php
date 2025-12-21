@@ -25,7 +25,7 @@ use SilverStripe\UserForms\Model\Recipient\EmailRecipient;
       * Update email based on recipient configuration
       */
      public function updateEmail(Email $email, EmailRecipient $recipient, &$emailData) {
-         if($recipient && $recipient->IncludeOriginatingIPAddress == 0) {
+         if($recipient->IncludeOriginatingIPAddress == 0) {
              // remove IP if recipient is not getting it
              unset($emailData['OriginatingIP']);
              $email->removeData('OriginatingIP');
