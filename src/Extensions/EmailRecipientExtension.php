@@ -12,8 +12,8 @@ use SilverStripe\ORM\DataExtension;
  * @property bool $IncludeOriginatingIPAddress
  * @extends \SilverStripe\ORM\DataExtension<(\SilverStripe\UserForms\Model\Recipient\EmailRecipient & static)>
  */
-class EmailRecipientExtension extends DataExtension {
-
+class EmailRecipientExtension extends DataExtension
+{
     private static array $db = [
         'IncludeOriginatingIPAddress' => 'Boolean'
     ];
@@ -25,7 +25,8 @@ class EmailRecipientExtension extends DataExtension {
     /**
      * Add field, prior to 'HideFormData'
      */
-    public function updateCmsFields(Fieldlist $fields) {
+    public function updateCmsFields(Fieldlist $fields)
+    {
         $fields->insertAfter(
             'HideFormData',
             CheckboxField::create(

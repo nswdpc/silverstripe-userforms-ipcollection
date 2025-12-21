@@ -5,8 +5,8 @@ namespace NSWDPC\UserForms\IpCollection\Tests;
 use SilverStripe\Dev\SapphireTest;
 use NSWDPC\UserForms\IpCollection\IP;
 
-class IpTest extends SapphireTest {
-
+class IpTest extends SapphireTest
+{
     /**
      * @var bool
      */
@@ -17,37 +17,39 @@ class IpTest extends SapphireTest {
     protected $xff;
 
     #[\Override]
-    protected function setUp() : void {
+    protected function setUp(): void
+    {
         parent::setUp();
 
         // store original values
-        if(isset($_SERVER['REMOTE_ADDR'])) {
+        if (isset($_SERVER['REMOTE_ADDR'])) {
             $this->ra = $_SERVER['REMOTE_ADDR'];
         }
 
-        if(isset($_SERVER['HTTP_CF_CONNECTING_IP'])) {
+        if (isset($_SERVER['HTTP_CF_CONNECTING_IP'])) {
             $this->cf = $_SERVER['HTTP_CF_CONNECTING_IP'];
         }
 
-        if(isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+        if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
             $this->xff = $_SERVER['HTTP_X_FORWARDED_FOR'];
         }
     }
 
     #[\Override]
-    protected function tearDown() : void {
+    protected function tearDown(): void
+    {
         parent::tearDown();
 
         // reset values
-        if($this->ra) {
+        if ($this->ra) {
             $_SERVER['REMOTE_ADDR'] = $this->ra;
         }
 
-        if($this->cf) {
+        if ($this->cf) {
             $_SERVER['HTTP_CF_CONNECTING_IP'] = $this->cf;
         }
 
-        if($this->xff) {
+        if ($this->xff) {
             $_SERVER['HTTP_X_FORWARDED_FOR'] = $this->xff;
         }
     }
@@ -55,7 +57,8 @@ class IpTest extends SapphireTest {
     /**
      * Test IP priority logic
      */
-    public function testIpPriority(): void {
+    public function testIpPriority(): void
+    {
 
         $cf = 'a.b.c.d';
         $xff = '1.2.3.4';
@@ -74,7 +77,8 @@ class IpTest extends SapphireTest {
     /**
      * Test IP fallback logic
      */
-    public function testIpFallback(): void {
+    public function testIpFallback(): void
+    {
 
         $cf = '';
         $xff = '';
@@ -93,7 +97,8 @@ class IpTest extends SapphireTest {
     /**
      * Test untrusted data
      */
-    public function testIpClean(): void {
+    public function testIpClean(): void
+    {
 
         $cf = '127.0.0.1,<a href="naughty">click here!</a>';
         $xff = '';

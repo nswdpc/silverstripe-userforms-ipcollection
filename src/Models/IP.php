@@ -8,8 +8,8 @@ use SilverStripe\Core\Config\Configurable;
  * IP model
  * @author James
  */
-class IP {
-
+class IP
+{
     use Configurable;
 
     private static array $ip_priority = [];
@@ -18,9 +18,10 @@ class IP {
      * Get the IP address based on configured priorties.
      * Each record in ip_priority is a header name, that will be prefixed with HTTP_
      */
-    public static function getByPriority() : string {
+    public static function getByPriority(): string
+    {
         $headers = static::config()->get('ip_priority');
-        if(!is_array($headers)) {
+        if (!is_array($headers)) {
             return "";
         }
 
@@ -28,13 +29,13 @@ class IP {
         $prefix = "HTTP_";
 
         $value = "";
-        foreach($headers as $header) {
+        foreach ($headers as $header) {
             $value = "";
-            if(isset($_SERVER[ $prefix . $header ])) {
+            if (isset($_SERVER[ $prefix . $header ])) {
                 $value = trim(strip_tags((string) $_SERVER[ $prefix . $header ]));
             }
 
-            if($value !== '') {
+            if ($value !== '') {
                 // found value
                 return $value;
             }
@@ -42,7 +43,7 @@ class IP {
 
         // fall back to REMOTE_ADDR
         // @phpstan-ignore identical.alwaysTrue
-        if($value === '') {
+        if ($value === '') {
             return $_SERVER['REMOTE_ADDR'] ?? '';
         } else {
             // nothing found
