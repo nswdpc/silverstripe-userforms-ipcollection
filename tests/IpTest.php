@@ -2,6 +2,10 @@
 
 namespace NSWDPC\UserForms\IpCollection\Tests;
 
+use SilverStripe\Control\Middleware\TrustedProxyMiddleware;
+use SilverStripe\Control\Controller;
+use SilverStripe\Control\HTTPRequest;
+use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Dev\SapphireTest;
 use NSWDPC\UserForms\IpCollection\IP;
 
@@ -12,48 +16,18 @@ class IpTest extends SapphireTest
      */
     protected $usesDatabase = false;
 
-    protected $ra;
-
-    protected $cf;
-
-    protected $xff;
-
     #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
 
-        // store original values
-        if (isset($_SERVER['REMOTE_ADDR'])) {
-            $this->ra = $_SERVER['REMOTE_ADDR'];
-        }
-
-        if (isset($_SERVER['HTTP_CF_CONNECTING_IP'])) {
-            $this->cf = $_SERVER['HTTP_CF_CONNECTING_IP'];
-        }
-
-        if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            $this->xff = $_SERVER['HTTP_X_FORWARDED_FOR'];
-        }
-    }
-
-    #[\Override]
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-
-        // reset values
-        if ($this->ra) {
-            $_SERVER['REMOTE_ADDR'] = $this->ra;
-        }
-
-        if ($this->cf) {
-            $_SERVER['HTTP_CF_CONNECTING_IP'] = $this->cf;
-        }
-
-        if ($this->xff) {
-            $_SERVER['HTTP_X_FORWARDED_FOR'] = $this->xff;
-        }
+        // default request headers
+        $trustedProxyMiddleware = Injector::inst()->get(TrustedProxyMiddleware::class);
+        $trustedProxyMiddleware->setProxyIPHeaders([
+            'Client-IP',
+            'X-Forwarded-For'
+        ]);
+        $trustedProxyMiddleware->setTrustedProxyIPs('*');// allow trusted proxy configuration to be used
     }
 
     /**
@@ -62,16 +36,26 @@ class IpTest extends SapphireTest
     public function testIpPriority(): void
     {
 
-        $cf = 'a.b.c.d';
-        $xff = '1.2.3.4';
-        $ra = 'r.em.ot.e';
+        $trustedProxyMiddleware = Injector::inst()->get(TrustedProxyMiddleware::class);
+        $headers = [
+            'CF-Connecting-IP',// highest priority
+            'X-Forwarded-For'
+        ];
+        $trustedProxyMiddleware->setProxyIPHeaders($headers);
 
-        $_SERVER['HTTP_CF_CONNECTING_IP'] = $cf;
-        $_SERVER['HTTP_X_FORWARDED_FOR'] = $xff;
-        $_SERVER['REMOTE_ADDR'] = $ra;
+        $controller = Controller::curr();
 
-        $ip = IP::getByPriority();
+        // some valid non-private, non-reserved headers for a test
+        $cf = '1.1.1.1';
+        $xff = '1.0.0.1';
 
+        $request = $controller->getRequest();
+        $request->addHeader('CF-Connecting-IP', $cf);
+        $request->addHeader('X-Forwarded-For', $xff);
+
+        $delegate = function(HTTPRequest $request) {};
+        $trustedProxyMiddleware->process($request, $delegate);
+        $ip = IP::getFromRequest($controller);
         $this->assertEquals($cf, $ip);
 
     }
@@ -82,39 +66,50 @@ class IpTest extends SapphireTest
     public function testIpFallback(): void
     {
 
-        $cf = '';
-        $xff = '';
-        $ra = 'original';
+        $original = '8.8.8.8';
+        $trustedProxyMiddleware = Injector::inst()->get(TrustedProxyMiddleware::class);
 
-        $_SERVER['HTTP_CF_CONNECTING_IP'] = $cf;
-        $_SERVER['HTTP_X_FORWARDED_FOR'] = $xff;
-        $_SERVER['REMOTE_ADDR'] = $ra;
+        $controller = Controller::curr();
+        $request = $controller->getRequest();
+        $request->setIp($original);
+        $request->removeHeader('CF-Connecting-IP');
+        $request->removeHeader('X-Forwarded-For');
 
-        $ip = IP::getByPriority();
-
-        $this->assertEquals($ra, $ip);
+        $delegate = function(HTTPRequest $request) {};
+        $trustedProxyMiddleware->process($request, $delegate);
+        $ip = IP::getFromRequest($controller);
+        $this->assertEquals($original, $ip);
 
     }
 
     /**
-     * Test untrusted data
+     * Test invalid data
      */
     public function testIpClean(): void
     {
 
-        $cf = '127.0.0.1,<a href="naughty">click here!</a>';
-        $xff = '';
-        $ra = 'original';
+        $trustedProxyMiddleware = Injector::inst()->get(TrustedProxyMiddleware::class);
+        $headers = [
+            'CF-Connecting-IP',// highest priority
+            'X-Forwarded-For'
+        ];
+        $trustedProxyMiddleware->setProxyIPHeaders($headers);
 
-        $_SERVER['HTTP_CF_CONNECTING_IP'] = $cf;
-        $_SERVER['HTTP_X_FORWARDED_FOR'] = $xff;
-        $_SERVER['REMOTE_ADDR'] = $ra;
+        $controller = Controller::curr();
 
-        $ip = IP::getByPriority();
+        $original = '8.8.8.8';
+        $cf = 'invalid cf value';
+        $xff = 'invalid xff value';
 
-        $expected = "127.0.0.1,click here!";
+        $request = $controller->getRequest();
+        $request->setIp($original);
+        $request->addHeader('CF-Connecting-IP', $cf);
+        $request->addHeader('X-Forwarded-For', $xff);
 
-        $this->assertEquals($expected, $ip);
+        $delegate = function(HTTPRequest $request) {};
+        $trustedProxyMiddleware->process($request, $delegate);
+        $ip = IP::getFromRequest($controller);
+        $this->assertEquals($original, $ip);
 
     }
 }
