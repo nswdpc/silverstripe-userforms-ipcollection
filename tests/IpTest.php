@@ -53,7 +53,7 @@ class IpTest extends SapphireTest
         $request->addHeader('CF-Connecting-IP', $cf);
         $request->addHeader('X-Forwarded-For', $xff);
 
-        $delegate = function(HTTPRequest $request): void {};
+        $delegate = function (HTTPRequest $request): void {};
         $trustedProxyMiddleware->process($request, $delegate);
         $ip = IP::getFromRequest($controller);
         $this->assertEquals($cf, $ip);
@@ -75,7 +75,7 @@ class IpTest extends SapphireTest
         $request->removeHeader('CF-Connecting-IP');
         $request->removeHeader('X-Forwarded-For');
 
-        $delegate = function(HTTPRequest $request): void {};
+        $delegate = function (HTTPRequest $request): void {};
         $trustedProxyMiddleware->process($request, $delegate);
         $ip = IP::getFromRequest($controller);
         $this->assertEquals($original, $ip);
@@ -106,7 +106,7 @@ class IpTest extends SapphireTest
         $request->addHeader('CF-Connecting-IP', $cf);
         $request->addHeader('X-Forwarded-For', $xff);
 
-        $delegate = function(HTTPRequest $request): void {};
+        $delegate = function (HTTPRequest $request): void {};
         $trustedProxyMiddleware->process($request, $delegate);
         $ip = IP::getFromRequest($controller);
         $this->assertEquals($original, $ip);

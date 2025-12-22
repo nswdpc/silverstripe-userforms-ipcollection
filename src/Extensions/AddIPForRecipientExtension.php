@@ -22,7 +22,7 @@ class AddIPForRecipientExtension extends Extension
     {
         $emailData['OriginatingIP'] = null;
         $controller = $this->getOwner();
-        if($controller instanceof UserDefinedFormController) {
+        if ($controller instanceof UserDefinedFormController) {
             $emailData['OriginatingIP'] = IP::getFromRequest($controller);
         }
     }
