@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NSWDPC\UserForms\IpCollection;
 
 use SilverStripe\Core\Extension;
