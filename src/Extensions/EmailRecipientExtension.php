@@ -4,15 +4,15 @@ namespace NSWDPC\UserForms\IpCollection;
 
 use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\FieldList;
-use SilverStripe\ORM\DataExtension;
+use SilverStripe\Core\Extension;
 
 /**
  * Adds option to include OriginatingIP in the email to this recipient
  * @author James
  * @property bool $IncludeOriginatingIPAddress
- * @extends \SilverStripe\ORM\DataExtension<(\SilverStripe\UserForms\Model\Recipient\EmailRecipient & static)>
+ * @extends \SilverStripe\Core\Extension<(\SilverStripe\UserForms\Model\Recipient\EmailRecipient & static)>
  */
-class EmailRecipientExtension extends DataExtension
+class EmailRecipientExtension extends Extension
 {
     private static array $db = [
         'IncludeOriginatingIPAddress' => 'Boolean'
