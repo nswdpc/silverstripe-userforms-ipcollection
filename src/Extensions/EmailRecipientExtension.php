@@ -25,7 +25,7 @@ class EmailRecipientExtension extends DataExtension
     /**
      * Add field, prior to 'HideFormData'
      */
-    public function updateCmsFields(Fieldlist $fields)
+    public function updateCmsFields(FieldList $fields)
     {
         $fields->insertAfter(
             'HideFormData',

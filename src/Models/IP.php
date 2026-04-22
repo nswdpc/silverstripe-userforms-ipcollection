@@ -3,6 +3,7 @@
 namespace NSWDPC\UserForms\IpCollection;
 
 use SilverStripe\Core\Config\Configurable;
+use SilverStripe\Control\Controller;
 
 /**
  * IP model
@@ -15,8 +16,19 @@ class IP
     private static array $ip_priority = [];
 
     /**
+     * Returns the IP address from the controller's request property
+     * taking into account trusted proxy configuration
+     */
+    public static function getFromRequest(Controller $controller): ?string
+    {
+        $request = $controller->getRequest();
+        return $request->getIp();
+    }
+
+    /**
      * Get the IP address based on configured priorties.
      * Each record in ip_priority is a header name, that will be prefixed with HTTP_
+     * @deprecated
      */
     public static function getByPriority(): string
     {

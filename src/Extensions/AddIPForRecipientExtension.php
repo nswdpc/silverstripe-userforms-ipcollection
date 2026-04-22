@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NSWDPC\UserForms\IpCollection;
 
 use SilverStripe\Core\Extension;
 use SilverStripe\Control\Email\Email;
+use SilverStripe\UserForms\Control\UserDefinedFormController;
 use SilverStripe\UserForms\Model\Recipient\EmailRecipient;
 
 /**
@@ -19,8 +22,11 @@ class AddIPForRecipientExtension extends Extension
      */
     public function updateEmailData(array &$emailData, $attachments)
     {
-        $ip = IP::getByPriority();
-        $emailData['OriginatingIP'] = $ip;
+        $emailData['OriginatingIP'] = null;
+        $controller = $this->getOwner();
+        if ($controller instanceof UserDefinedFormController) {
+            $emailData['OriginatingIP'] = IP::getFromRequest($controller);
+        }
     }
 
     /**
