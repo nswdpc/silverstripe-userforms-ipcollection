@@ -14,7 +14,7 @@ composer require nswdpc/silverstripe-userforms-ipcollection
 
 ## Documentation
 
-All user form email templates in your project should handle include the {$OriginatingIP} template variable, these can usually be found in the templates/email/ directory of a project or its theme(s).
+All user form email templates in your project or theme (`SubmittedFormEmail.ss`) should handle including the {$OriginatingIP} template variable. These templates can usually be found in the `./app/templates/email/` directory of a project or its theme(s).
 
 ```html
 <% if $OriginatingIP %>
