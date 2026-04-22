@@ -26,35 +26,9 @@ All user form email templates in your project should handle include the {$Origin
 
 1. For every recipient who should receive an originating IP (or IPs), check the 'Include the originating IP address' checkbox on the "Email Content" tab.
 
-When a submission is made, the originating IP will be determined
+When a submission is made, the originating IP will be determined based on the request.
 
 The Originating IP may not be a single IP address, for instance it could include any number of proxy IPs.
-
-## Configuration
-
-By default, the module will attempt to get an IP first from the Cloudflare `CF-Connecting-IP` header, then from the `X-Forwarded-For` header. If you don't use Cloudflare, it's unlikely that this header will be present and so it will be ignored.
-
-You can modify the priority and expected headers in project configuration:
-
-```yaml
----
-Name: 'reset-userforms-ipcollection'
-After:
-    - '#nswdpc-userforms-ipcollection'
-# reset IP
-NSWDPC\UserForms\IpCollection\IP:
-    ip_priority: []
----
-Name: 'app-userforms-ipcollection'
-After:
-    - '#reset-userforms-ipcollection'
----
-# Set project-based IP priorities
-NSWDPC\UserForms\IpCollection\IP:
-  ip_priority:
-    - 'SOME_OTHER_HEADER'
-    - 'X_FORWARDED_FOR'
-```
 
 ## Maintainers
 
